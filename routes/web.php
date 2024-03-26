@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\FollowController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +20,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::resource('posts', PostController::class);
+Route::resource('like', LikeController::class)->only(['index', 'store', 'destroy']);
+Route::resource('follows', FollowController::class)->only(['index', 'store', 'destroy']);
+Route::get('/follower',[FollowController::class, 'followerindex']);
