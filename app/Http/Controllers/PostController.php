@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\PostRequest;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -18,8 +20,10 @@ class PostController extends Controller
      */
     public function index()
     {
+        $posts = Post::where('user_id', \Auth::user()->id)->get(); //これがリレーション設定で簡単に記載できる。
         return view('posts.index', [
             'title' => '投稿一覧',
+            'posts' => $posts,
         ]);
     }
 
@@ -36,14 +40,20 @@ class PostController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * 
+     * 
      */
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        //
+        Post::create([
+            'user_id' => \Auth::user()->id,
+            'comment' => $request->comment,
+            'image' => '',
+        ]);
+
+        session()->flash('success', '投稿を追加しました');
+
+        return redirect()->route('posts.index');
     }
 
     /**
