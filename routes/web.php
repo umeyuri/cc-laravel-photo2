@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\FollowController;
-
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,3 +25,6 @@ Route::resource('posts', PostController::class);
 Route::resource('like', LikeController::class)->only(['index', 'store', 'destroy']);
 Route::resource('follows', FollowController::class)->only(['index', 'store', 'destroy']);
 Route::get('/follower',[FollowController::class, 'followerindex']);
+
+Auth::routes();
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

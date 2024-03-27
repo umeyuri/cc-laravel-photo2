@@ -6,6 +6,11 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
+    public function __construct() {
+        $this->middleware('auth');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +18,9 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return view('posts.index', [
+            'title' => '投稿一覧',
+        ]);
     }
 
     /**
@@ -23,7 +30,9 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create', [
+            'title' => '新規投稿',
+        ]);
     }
 
     /**
@@ -45,7 +54,9 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('posts.show', [
+            'title' => '投稿詳細',
+        ]);
     }
 
     /**
@@ -56,7 +67,9 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('posts.edit', [
+            'title' => '投稿編集',
+        ]);
     }
 
     /**
