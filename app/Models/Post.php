@@ -14,4 +14,8 @@ class Post extends Model
         'comment',
         'image',
     ];
+
+    public function user() {
+        return $this->belongsTo('App\Models\User');
+    }
 }
