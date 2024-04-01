@@ -20,6 +20,9 @@
         .success {
             color: green;
         }
+        .delete {
+            display: inline;
+        }
     </style>
 </head>
 <body>

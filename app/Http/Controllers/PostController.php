@@ -20,7 +20,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::where('user_id', \Auth::user()->id)->get(); //これがリレーション設定で簡単に記載できる。
+        //これがリレーション設定で簡単に記載できる。
+        // $posts = Post::where('user_id', \Auth::user()->id)->get();        
+        $posts = \Auth::user()->posts;
+
         return view('posts.index', [
             'title' => '投稿一覧',
             'posts' => $posts,
@@ -77,8 +80,11 @@ class PostController extends Controller
      */
     public function edit($id)
     {
+        $post = Post::find($id);
+
         return view('posts.edit', [
             'title' => '投稿編集',
+            'post' => $post,
         ]);
     }
 
@@ -89,9 +95,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        //
+        $post = Post::find($id);
+        $post->update($request->only(['comment']));
+
+        session()->flash('success', '更新しました');
+
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -102,6 +113,11 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::find($id);
+        $post->delete();
+
+        session()->flash('success', '削除しました');
+
+        return redirect()->route('posts.index');
     }
 }
