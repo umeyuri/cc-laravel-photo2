@@ -23,6 +23,9 @@
         .delete {
             display: inline;
         }
+        .post {
+            margin-bottom: 40px;
+        }
     </style>
 </head>
 <body>
