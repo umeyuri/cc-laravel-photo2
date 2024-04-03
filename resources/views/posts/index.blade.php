@@ -7,13 +7,22 @@
     <a href="{{ route('posts.create') }}">新規投稿</a>
     <ul>
     @forelse ($posts as $post)
-        <li class="post">{{ $post->user->name }}: {{ $post->comment }}({{ $post->created_at }})
+        <li class="post">投稿者：{{ $post->user->name }}: {{ $post->comment }}({{ $post->created_at }})
             <a href="{{ route('posts.edit', $post->id) }}">[編集]</a>
             <form method="post" class="delete" action="{{ route('posts.destroy', $post->id) }}">
                 @csrf
                 @method('delete')
                 <input type="submit" value="削除">
             </form>
+            <div class="post_body">
+                <div class="post_body_img">
+                    @if ($post->image !== '')
+                        <img src="{{ asset('storage/' . $post->image) }}">
+                    @else
+                        <img src="{{ asset('images/no_image.png') }}">
+                    @endif
+                </div>
+            </div>
             <ul>
                 @forelse ($post->comments as $comment)
                     <li>{{ $comment->user->name }}: {{ $comment->body }}</li>

@@ -25,6 +25,13 @@ class PostRequest extends FormRequest
     {
         return [
             'comment' => ['required', 'max:200'],
+            'image' => [
+                'file',
+                'image',
+                'mimes:jpeg,jpg,png',
+                'dimensions:min_width=50,min_height=50,max_width=1000,max_height=1000', // 50*50 ~ 1000*1000 まで
+
+            ]
         ];
     }
 }

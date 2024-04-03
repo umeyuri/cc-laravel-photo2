@@ -48,10 +48,16 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
+        $path = '';
+        $image = $request->file('image');
+        if (isset($image)) {
+            $path = $image->store('photos', 'public'); //publicの中のphotosディレクトリ(storage/)
+        }
+
         Post::create([
             'user_id' => \Auth::user()->id,
             'comment' => $request->comment,
-            'image' => '',
+            'image' => $path,
         ]);
 
         session()->flash('success', '投稿を追加しました');
