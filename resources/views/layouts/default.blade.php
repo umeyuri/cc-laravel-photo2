@@ -26,6 +26,12 @@
         .post {
             margin-bottom: 40px;
         }
+        .post_body {
+            width: 100px;
+        }
+        .post_body_img img{
+            width: 100%;
+        }
     </style>
 </head>
 <body>
