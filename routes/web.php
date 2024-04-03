@@ -31,3 +31,5 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::resource('comments', CommentController::class)->only('store', 'destroy');
+Route::get('/posts/{post}/edit_image', [PostController::class, 'editImage'])->name('posts.edit_image');
+Route::patch('/posts/{post}/edit_image', [PostController::class, 'updateImage'])->name('posts.update_image');

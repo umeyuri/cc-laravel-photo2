@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
+use App\Http\Requests\PostImageRequest;
 use App\Models\Post;
 
 class PostController extends Controller
@@ -120,10 +121,42 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
+        if ($post->image !== '') {
+            \Storage::disk('public')->delete($post->image);
+        }
         $post->delete();
 
         session()->flash('success', '削除しました');
 
+        return redirect()->route('posts.index');
+    }
+
+    public function editImage($id) {
+        $post = Post::find($id);
+
+        return view('posts.edit_image', [
+            'post' => $post,
+            'title' => '画像変更画面'
+        ]);
+    }
+
+    public function updateImage(PostImageRequest $request, $id) {
+        $path = '';
+        //投稿された画像データの保存
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('photos', 'public');
+        }
+        //古い画像データの削除
+        $post = Post::find($id);
+        if ($post->image !== '') {
+            \Storage::disk('public')->delete($post->image);
+        }
+        //ファイルパスをポストのimageカラムに保存
+        // $post->update(['image' => $path]);
+        $post->image = $path;
+        $post->save();
+        
+        session()->flash('success', '画像を更新しました');
         return redirect()->route('posts.index');
     }
 }

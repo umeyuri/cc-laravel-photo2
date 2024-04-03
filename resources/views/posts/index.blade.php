@@ -21,6 +21,7 @@
                     @else
                         <img src="{{ asset('images/no_image.png') }}">
                     @endif
+                    <a href="{{ route('posts.edit_image', $post->id) }}">画像の変更</a>
                 </div>
             </div>
             <ul>
