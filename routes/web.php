@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -30,6 +31,10 @@ Route::get('/follower',[FollowController::class, 'followerindex']);
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::resource('comments', CommentController::class)->only('store', 'destroy');
+Route::resource('comments', CommentController::class)->only(['store', 'destroy']);
 Route::get('/posts/{post}/edit_image', [PostController::class, 'editImage'])->name('posts.edit_image');
 Route::patch('/posts/{post}/edit_image', [PostController::class, 'updateImage'])->name('posts.update_image');
+
+Route::resource('users', UserController::class)->only(['show', 'edit', 'update']);
+Route::get('/users/{user}/edit_image', [UserController::class, 'editImage'])->name('users.edit_image');
+Route::patch('/users/{user}/edit_image', [UserController::class, 'updateImage'])->name('users.update_image');
