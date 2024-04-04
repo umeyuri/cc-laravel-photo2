@@ -5,7 +5,7 @@
     <ul class="header_nav">
         <li><a href="{{ route('posts.index') }}">投稿一覧</a></li>
         <li><a href="{{ route('like.index') }}">いいねリスト</a></li>
-        <li>ユーザープロフィール</li>
+        <li><a href="{{ route('users.show', \Auth::user()->id) }}">ユーザープロフィール</a></li>
         <li>
             <form method="post" action="{{ route('logout') }}">
                 @csrf
