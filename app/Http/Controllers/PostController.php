@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PostRequest;
 use App\Http\Requests\PostImageRequest;
 use App\Models\Post;
+use App\Models\User;
 
 class PostController extends Controller
 {
@@ -23,11 +24,15 @@ class PostController extends Controller
     {
         //これがリレーション設定で簡単に記載できる。
         // $posts = Post::where('user_id', \Auth::user()->id)->get();        
-        $posts = \Auth::user()->posts;
+        //$posts = \Auth::user()->posts()->latest()->get();
+        //dd(Post::recommend()->toSql());
+        $users = User::recommend(\Auth::user()->id)->get();
+        $posts = \Auth::user()->posts()->latest()->get();
 
         return view('posts.index', [
             'title' => '投稿一覧',
             'posts' => $posts,
+            'users' => $users,
         ]);
     }
 

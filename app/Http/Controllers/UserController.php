@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Post;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\PostImageRequest;
 
@@ -11,9 +12,12 @@ class UserController extends Controller
 {
     public function show($id) {
         $user = User::find($id);
+        $recommends = Post::recommend($user->id)->get();
+        
         return view('users.show', [
             'title' => 'ユーザープロフィール',
             'user' => $user,
+            'recommends' => $recommends,
         ]);
     }
 

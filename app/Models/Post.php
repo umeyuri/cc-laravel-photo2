@@ -25,4 +25,11 @@ class Post extends Model
         return $this->hasMany('App\Models\Comment');
     }
 
+    // public function scopeRecommend($query) {
+    //     return $query->inRandomOrder()->limit(3);
+    // }
+
+    public function scopeRecommend($query, $user_id) {
+        return $query->where('user_id', $user_id)->inRandomOrder()->limit(3);
+    }
 }
