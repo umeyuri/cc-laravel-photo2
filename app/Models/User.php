@@ -47,4 +47,8 @@ class User extends Authenticatable
     public function posts() {
         return $this->hasMany('App\Models\Post');
     }
+
+    public function scopeRecommend($query, $user_id) { //第二引数に書くことで使える
+        return $query->where('id', '!=' ,$user_id)->latest()->limit(3);
+    }
 }
