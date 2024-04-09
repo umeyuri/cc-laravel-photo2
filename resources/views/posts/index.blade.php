@@ -13,38 +13,44 @@
         @endforelse
     </ul>
     <a href="{{ route('posts.create') }}">新規投稿</a>
-    <div class="container">
-    @forelse ($posts as $post)
-    <div class="item post_body_img">
-             {{ $post->comment }}({{ $post->created_at }})
-            <a href="{{ route('posts.edit', $post->id) }}">[編集]</a>
-            <form method="post" class="delete" action="{{ route('posts.destroy', $post->id) }}">
-                @csrf
-                @method('delete')
-                <input type="submit" value="削除">
-            </form>
+    <div class="grid">
+        @forelse ($posts as $post)
+        <div class="grid-item">
             @if ($post->image !== '')
                 <img src="{{ asset('storage/' . $post->image) }}">
             @else
                 <img src="{{ asset('images/no_image.png') }}">
             @endif
-                    <a href="{{ route('posts.edit_image', $post->id) }}">画像の変更</a>
-            <ul>
-                @forelse ($post->comments as $comment)
-                    <li>{{ $comment->user->name }}: {{ $comment->body }}</li>
-                @empty
-                    <p>コメントはありません</p>
-                @endforelse
-            </ul>
-            <form method="post" action="{{ route('comments.store') }}">
-                @csrf
-                コメントを追加：<input type="text" name="body">
-                <input type="hidden" name="post_id" value="{{ $post->id }}">
-                <input type="submit" value="送信">
-            </form>
+            <div class="save">
+                <a href="{{ route('posts.edit', $post->id) }}">edit</a>
+            </div>
+            <div class="link">
+                <form method="post" action="{{ route('posts.destroy', $post->id) }}">
+                    @csrf
+                    @method('delete')
+                    <input type="submit" value="削除">
+                </form>
+            </div>
+            <div class="share">
+                <a href="{{ route('posts.edit_image', $post->id) }}">画像変更</a>
+            </div>
+            <div class="overlay"></div>
         </div>
-    @empty
-        <p>投稿はありません</p>
-    @endforelse
-    </div>
+        @empty
+            <p>投稿はありません</p>
+        @endforelse
+    </div>    
 @endsection
+{{-- <ul>
+    @forelse ($post->comments as $comment)
+        <li>{{ $comment->user->name }}: {{ $comment->body }}</li>
+    @empty
+        <p>コメントはありません</p>
+    @endforelse
+</ul>
+<form method="post" action="{{ route('comments.store') }}">
+    @csrf
+    コメントを追加：<input type="text" name="body">
+    <input type="hidden" name="post_id" value="{{ $post->id }}">
+    <input type="submit" value="送信">
+</form> --}}
