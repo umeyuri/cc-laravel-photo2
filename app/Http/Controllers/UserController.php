@@ -12,8 +12,8 @@ class UserController extends Controller
 {
     public function show($id) {
         $user = User::find($id);
-        $recommends = Post::recommend($user->id)->get();
-        
+        $recommends = Post::recommend($user->id)->limit(3)->get();
+
         return view('users.show', [
             'title' => 'ユーザープロフィール',
             'user' => $user,

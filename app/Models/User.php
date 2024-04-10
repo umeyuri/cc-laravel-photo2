@@ -49,6 +49,6 @@ class User extends Authenticatable
     }
 
     public function scopeRecommend($query, $user_id) { //第二引数に書くことで使える
-        return $query->where('id', '!=' ,$user_id)->latest()->limit(3);
+        return $query->where('id', '!=' ,$user_id)->limit(10);
     }
 }
