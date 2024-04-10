@@ -22,7 +22,7 @@
                 <img src="{{ asset('images/no_image.png') }}">
             @endif
             <div class="save">
-                <a href="{{ route('posts.edit', $post->id) }}">edit</a>
+                <a href="{{ route('posts.edit', $post->id) }}" class="inside">編集</a>
             </div>
             <div class="link">
                 <form method="post" action="{{ route('posts.destroy', $post->id) }}">
@@ -32,7 +32,7 @@
                 </form>
             </div>
             <div class="share">
-                <a href="{{ route('posts.edit_image', $post->id) }}">画像変更</a>
+                <a href="{{ route('posts.edit_image', $post->id) }}" class="inside">画像変更</a>
             </div>
             <div class="overlay"></div>
         </div>

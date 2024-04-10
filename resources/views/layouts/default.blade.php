@@ -6,8 +6,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
     <style>
-        a {
-            text-decoration:none; 
+        .inside{
+            text-decoration:none;
+            color:rgba(0, 0, 0, 1);
         }
 
         .header_nav {
