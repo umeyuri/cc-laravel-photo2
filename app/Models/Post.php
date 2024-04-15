@@ -25,6 +25,20 @@ class Post extends Model
         return $this->hasMany('App\Models\Comment');
     }
 
+    public function likes() { //中間テーブルとの１対多の関係
+        return $this->hasMany('App\Models\Like');
+    }
+
+    public function likedUsers() {
+        return $this->belongsToMany('App\Models\User', 'likes');
+    }
+
+    public function isLikedBy($user_id) {
+        //特定のユーザーにいいねされているかどうかの結果を返す
+        $result = $this->likedUsers()->where('user_id', $user_id)->exists();
+        return $result;
+    }
+
     // public function scopeRecommend($query) {
     //     return $query->inRandomOrder()->limit(3);
     // }

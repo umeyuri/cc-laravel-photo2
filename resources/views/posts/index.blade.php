@@ -21,6 +21,14 @@
             @else
                 <img src="{{ asset('images/no_image.png') }}">
             @endif
+            <form method="post" id="likeForm" action="{{ route('posts.toggle_like', $post) }}">
+                @csrf
+                @method('patch')
+                <button type="submit" class="likeButton @if($post->isLikedBy(Auth::user()->id)) liked @endif">
+                    <svg class="likeButton__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M91.6 13A28.7 28.7 0 0 0 51 13l-1 1-1-1A28.7 28.7 0 0 0 8.4 53.8l1 1L50 95.3l40.5-40.6 1-1a28.6 28.6 0 0 0 0-40.6z"/></svg>
+                    いいね
+                </button>    
+            </form>
             <div class="save">
                 <a href="{{ route('posts.edit', $post->id) }}" class="inside">編集</a>
             </div>

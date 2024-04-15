@@ -7,6 +7,7 @@ use App\Http\Requests\PostRequest;
 use App\Http\Requests\PostImageRequest;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Like;
 
 class PostController extends Controller
 {
@@ -163,5 +164,23 @@ class PostController extends Controller
         
         session()->flash('success', '画像を更新しました');
         return redirect()->route('posts.index');
+    }
+
+    public function toggeleLike($id) {
+        $post = Post::find($id);
+        $user = \Auth::user();
+
+        if ($post->isLikedBy($user->id)) {
+            $post->likes->where('user_id', $user->id)->first()->delete();
+            session()->flash('success', 'いいねを取り消ししました');
+        } else {
+            //いいねの設定 中間テーブルにcreateする
+            Like::create([
+                'user_id' => $user->id,
+                'post_id' => $post->id,
+            ]);
+        session()->flash('success', 'いいねしました');
+        }
+        return redirect('/posts');
     }
 }

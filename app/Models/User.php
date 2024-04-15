@@ -48,6 +48,14 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Post');
     }
 
+    public function likes() {//中間テーブルと1対多の関係
+        return $this->hasMany('App\Models\Like');
+    }
+
+    public function likePosts() {//中間テーブルを介してpostテーブルと多対多の関係
+        return $thos->belongsToMany('App\Models\Post', 'likes');
+    }
+
     public function scopeRecommend($query, $user_id) { //第二引数に書くことで使える
         return $query->where('id', '!=' ,$user_id)->limit(10);
     }

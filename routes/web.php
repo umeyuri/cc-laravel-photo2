@@ -38,3 +38,5 @@ Route::patch('/posts/{post}/edit_image', [PostController::class, 'updateImage'])
 Route::resource('users', UserController::class)->only(['show', 'edit', 'update']);
 Route::get('/users/{user}/edit_image', [UserController::class, 'editImage'])->name('users.edit_image');
 Route::patch('/users/{user}/edit_image', [UserController::class, 'updateImage'])->name('users.update_image');
+
+Route::patch('/posts/{post}/toggle_like', [PostController::class, 'toggeleLike'])->name('posts.toggle_like');
