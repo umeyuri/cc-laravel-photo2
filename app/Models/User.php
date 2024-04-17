@@ -53,10 +53,27 @@ class User extends Authenticatable
     }
 
     public function likePosts() {//中間テーブルを介してpostテーブルと多対多の関係
-        return $thos->belongsToMany('App\Models\Post', 'likes');
+        return $this->belongsToMany('App\Models\Post', 'likes'); //自分がuser_id 相手がpost_id
     }
 
     public function scopeRecommend($query, $user_id) { //第二引数に書くことで使える
         return $query->where('id', '!=' ,$user_id)->limit(10);
+    }
+
+    public function follows() { //中間テーブル
+        return $this->hasMany('App\Models\Follow');
+    }
+
+    public function follow_users() {
+        return $this->belongsToMany('App\Models\User', 'follows', 'user_id', 'follow_id');
+    }
+
+    public function followers() {
+        return $this->belongsToMany('App\Models\User', 'follows', 'follow_id', 'user_id');
+    }
+
+    //自分がフォローしているかどうか
+    public function isFollowing($user) {
+        return $this->follow_users()->where('follow_id', $user->id)->exists();
     }
 }

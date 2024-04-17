@@ -28,8 +28,9 @@ class PostController extends Controller
         //$posts = \Auth::user()->posts()->latest()->get();
         //dd(Post::recommend()->toSql());
         $users = User::recommend(\Auth::user()->id)->get();
-        $posts = \Auth::user()->posts()->latest()->get();
-
+        $follow_user_ids = \Auth::user()->follow_users->pluck('id');
+        //$posts = \Auth::user()->posts()->orWhereIn('user_id', $follow_user_ids)->latest()->get();
+        $posts = Post::latest()->get();
         return view('posts.index', [
             'title' => '投稿一覧',
             'posts' => $posts,
@@ -55,10 +56,8 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $path = '';
-        $image = $request->file('image');
         if (isset($image)) {
-            $path = $image->store('photos', 'public'); //publicの中のphotosディレクトリ(storage/)
+            $path = $this->saveImage($request->file('image'));
         }
 
         Post::create([
@@ -147,10 +146,9 @@ class PostController extends Controller
     }
 
     public function updateImage(PostImageRequest $request, $id) {
-        $path = '';
         //投稿された画像データの保存
         if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('photos', 'public');
+            $path = $this->saveImage($request->file('image'));
         }
         //古い画像データの削除
         $post = Post::find($id);
@@ -182,5 +180,14 @@ class PostController extends Controller
         session()->flash('success', 'いいねしました');
         }
         return redirect('/posts');
+    }
+
+    private function saveImage($image) {
+        $path = '';
+        if (isset($image)) {
+            $path = $image->store('photos', 'public'); //publicの中のphotosディレクトリ(storage/)
+        }
+
+        return $path;
     }
 }

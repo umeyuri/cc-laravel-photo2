@@ -8,6 +8,19 @@
         <h2>おすすめユーザー</h2>
         @forelse ($users as $user)
         <li><a href="{{ route('users.show', $user->id) }}">{{ $user->name }}</a></li>
+        @if (\Auth::user()->isFollowing($user))
+            <form method="post" action="{{ route('follows.destroy', $user->id)}}">
+                @csrf
+                @method('delete')
+                <input type="submit" value="フォロー解除">
+            </form>
+        @else
+            <form method="post" action="{{ route('follows.store') }}">
+                @csrf
+                <input type="hidden" name="follow_id" value="{{ $user->id }}">
+                <input type="submit" value="フォロー">
+            </form>
+        @endif
         @empty
             <p>おすすめのユーザーはいません</p>
         @endforelse
@@ -21,33 +34,37 @@
             @else
                 <img src="{{ asset('images/no_image.png') }}">
             @endif
-            <form method="post" id="likeForm" action="{{ route('posts.toggle_like', $post) }}">
-                @csrf
-                @method('patch')
-                <button type="submit" class="likeButton @if($post->isLikedBy(Auth::user()->id)) liked @endif">
-                    <svg class="likeButton__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M91.6 13A28.7 28.7 0 0 0 51 13l-1 1-1-1A28.7 28.7 0 0 0 8.4 53.8l1 1L50 95.3l40.5-40.6 1-1a28.6 28.6 0 0 0 0-40.6z"/></svg>
-                    いいね
-                </button>    
-            </form>
-            <div class="save">
-                <a href="{{ route('posts.edit', $post->id) }}" class="inside">編集</a>
-            </div>
-            <div class="link">
-                <form method="post" action="{{ route('posts.destroy', $post->id) }}">
+            @if ($post->user_id !== \Auth::user()->id)
+                <form method="post" id="likeForm" action="{{ route('posts.toggle_like', $post) }}">
                     @csrf
-                    @method('delete')
-                    <input type="submit" value="削除">
+                    @method('patch')
+                    <button type="submit" class="likeButton @if($post->isLikedBy(Auth::user()->id)) liked @endif">
+                        <svg class="likeButton__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M91.6 13A28.7 28.7 0 0 0 51 13l-1 1-1-1A28.7 28.7 0 0 0 8.4 53.8l1 1L50 95.3l40.5-40.6 1-1a28.6 28.6 0 0 0 0-40.6z"/></svg>
+                        いいね
+                    </button>    
                 </form>
-            </div>
-            <div class="share">
-                <a href="{{ route('posts.edit_image', $post->id) }}" class="inside">画像変更</a>
-            </div>
+            @endif
+            @if ($post->user_id === \Auth::user()->id)
+                <div class="save">
+                    <a href="{{ route('posts.edit', $post->id) }}" class="inside">編集</a>
+                </div>
+                <div class="link">
+                    <form method="post" action="{{ route('posts.destroy', $post->id) }}">
+                        @csrf
+                        @method('delete')
+                        <input type="submit" value="削除">
+                    </form>
+                </div>
+                <div class="share">
+                    <a href="{{ route('posts.edit_image', $post->id) }}" class="inside">画像変更</a>
+                </div>
+            @endif
             <div class="overlay"></div>
         </div>
         @empty
             <p>投稿はありません</p>
         @endforelse
-    </div>    
+    </div>
 @endsection
 {{-- <ul>
     @forelse ($post->comments as $comment)
