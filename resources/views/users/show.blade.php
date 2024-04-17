@@ -33,12 +33,14 @@
     <ul>
         @forelse ($recommends as $recommend_post)
             <li class="post">{{ $recommend_post->comment }}({{ $recommend_post->created_at }})
-                <a href="{{ route('posts.edit', $recommend_post->id) }}">[編集]</a>
-                <form method="post" class="delete" action="{{ route('posts.destroy', $recommend_post->id) }}">
-                    @csrf
-                    @method('delete')
-                    <input type="submit" value="削除">
-                </form>
+                @if (auth()->user()->id === $recommend_post->user_id)
+                    <a href="{{ route('posts.edit', $recommend_post->id) }}">[編集]</a>                    
+                    <form method="post" class="delete" action="{{ route('posts.destroy', $recommend_post->id) }}">
+                        @csrf
+                        @method('delete')
+                        <input type="submit" value="削除">
+                    </form>
+                @endif
                 <div class="post_body">
                     <div class="post_body_img">
                         @if ($recommend_post->image !== '')
@@ -46,7 +48,9 @@
                         @else
                             <img src="{{ asset('images/no_image.png') }}">
                         @endif
-                        <a href="{{ route('posts.edit_image', $recommend_post->id) }}">画像の変更</a>
+                        @if (auth()->user()->id === $recommend_post->user_id)
+                            <a href="{{ route('posts.edit_image', $recommend_post->id) }}">画像の変更</a>
+                        @endif
                     </div>
                 </div>
                 <ul>
